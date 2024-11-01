@@ -1,0 +1,63 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de noticias</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .news-container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .news-item {
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        .news-item h2 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dashboard de Notícias</h1>
+    <div class="news-container" id="news-container"></div>
+
+    <script>
+         async function fetchNews() {
+            try {
+                const response = await fetch('/api/news');
+                const articles = await response.json();
+                const newsContainer = document.getElementById('news-container');
+
+                articles.forEach(article => {
+                    const newsItem = document.createElement('div');
+                    newsItem.className = 'news-item';
+                    newsItem.innerHTML = `
+                        <h2>${article.title}</h2>
+                        <p>${article.description}</p>
+                        <a href="${article.url}" target="_blank">Leia mais</a>
+                    `;
+                    newsContainer.appendChild(newsItem);
+                });
+            } catch (error) {
+                console.error('Erro ao buscar notícias:', error);
+            }
+        }
+
+        // Chama a função ao carregar a página
+        window.onload = fetchNews;
+    </script>
+</body>
+</html>
